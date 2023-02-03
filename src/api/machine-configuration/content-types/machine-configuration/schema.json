@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "machine_configurations",
+  "info": {
+    "singularName": "machine-configuration",
+    "pluralName": "machine-configurations",
+    "displayName": "MachineConfiguration"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Slot": {
+      "type": "integer",
+      "max": 12,
+      "min": 1,
+      "default": 0,
+      "required": true
+    },
+    "MeasureVolume": {
+      "type": "integer",
+      "required": true,
+      "min": 25,
+      "max": 50
+    },
+    "ingredient": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::ingredient.ingredient"
+    }
+  }
+}
