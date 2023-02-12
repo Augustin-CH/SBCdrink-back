@@ -6,4 +6,6 @@
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::recipe-ingredient.recipe-ingredient');
+module.exports = createCoreRouter('api::recipe-ingredient.recipe-ingredient', {
+  only: [''],
+});

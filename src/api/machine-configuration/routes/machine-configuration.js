@@ -6,4 +6,7 @@
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::machine-configuration.machine-configuration');
+module.exports = createCoreRouter('api::machine-configuration.machine-configuration', {
+  only: [''],
+});
+  
