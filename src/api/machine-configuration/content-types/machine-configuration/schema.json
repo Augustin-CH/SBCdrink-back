@@ -4,21 +4,22 @@
   "info": {
     "singularName": "machine-configuration",
     "pluralName": "machine-configurations",
-    "displayName": "MachineConfiguration"
+    "displayName": "MachineConfiguration",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "Slot": {
+    "slot": {
       "type": "integer",
       "max": 12,
       "min": 1,
       "default": 0,
       "required": true
     },
-    "MeasureVolume": {
+    "measureVolume": {
       "type": "integer",
       "required": true,
       "min": 25,

@@ -47,7 +47,7 @@ module.exports = createCoreController('api::recipe.recipe', ({ strapi }) => ({
           if(!availableIngredients.find(available => available.ingredient.id == ingredient.id)){
             isAvailable = false;
           }
-        })
+        });
         
         if(isAvailable){
           availableRecipes.push({
