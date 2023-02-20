@@ -1,0 +1,27 @@
+# path: ./docker-compose.yml
+
+version: '3'
+services:
+  strapi:
+    platform: linux/arm64
+    container_name: strapi
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - '1337:1337'
+#    volumes:
+#      - ./config:/app/config
+#      - ./src:/app/src
+#      - ./package.json:/package.json
+#      - ./yarn.lock:/yarn.lock
+#      - ./.env:/app/.env
+#      - ./public/uploads:/app/public/uploads
+    volumes:
+      - ./:/app:rw
+    networks:
+      - strapi
+
+networks:
+  strapi:
+    driver: bridge
