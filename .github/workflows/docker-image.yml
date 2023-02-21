@@ -1,17 +1,20 @@
 name: Docker Image CI
-
+      
 on:
   push:
-    branches: 
+    branches:
     - cicd-1
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: $CI_REGISTRY_IMAGE:${CI_COMMIT_REF_SLUG}
     steps:
     - uses: actions/checkout@v3
     - name: Build and push the Docker image
       run: |
         docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
         docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        DOCKER_BUILDKIT=1 docker build --target prod -t $IMAGE_NAME .
         docker push $IMAGE_NAME
