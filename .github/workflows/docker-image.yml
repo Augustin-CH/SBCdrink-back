@@ -18,6 +18,6 @@ jobs:
     - run: echo "image name $REGISTRY_URL"
     - name: Build and push the Docker image
       run: |
-        docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-        DOCKER_BUILDKIT=1 docker build -t $IMAGE_NAME .
-        docker push $REGISTRY_URL$IMAGE_NAME
+        docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $env.CI_REGISTRY
+        DOCKER_BUILDKIT=1 docker build -t ${{env.IMAGE_NAME}} .
+        docker push ${{env.REGISTRY_URL}}${{env.IMAGE_NAME}}
