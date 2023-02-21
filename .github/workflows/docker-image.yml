@@ -9,11 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: ${{github.GITHUB_REF_NAME}}:${{github.GITHUB_SHA}}
+      IMAGE_NAME: ${{github.ref_name}}:${{github.sha}}
     steps:
     - uses: actions/checkout@v3
     - run: echo '${{ toJSON(github) }}'
-    - run: echo "image name ${{github.GITHUB_REF_NAME}}:${{github.GITHUB_SHA}}"
+    - run: echo "image name $IMAGE_NAME"
     - name: Build and push the Docker image
       run: |
         docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
