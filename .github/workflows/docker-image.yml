@@ -14,8 +14,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: echo '${{ toJSON(github) }}'
-    - run: echo "image name $IMAGE_NAME"
-    - run: echo "image name $REGISTRY_URL"
+    - run: echo "image name ${{env.IMAGE_NAME}}"
+    - run: echo "image name ${{env.REGISTRY_URL}}"
     - name: Build and push the Docker image
       run: |
         docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
