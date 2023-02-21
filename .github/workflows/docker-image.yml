@@ -12,8 +12,9 @@ jobs:
       IMAGE_NAME: $GITHUB_REF_NAME:$GITHUB_SHA
     steps:
     - uses: actions/checkout@v3
+    - run: echo "image name $IMAGE_NAME"
     - name: Build and push the Docker image
       run: |
         docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-        DOCKER_BUILDKIT=1 docker build -t test:test .
-        docker push test:test
+        DOCKER_BUILDKIT=1 docker build -t IMAGE_NAME .
+        docker push $IMAGE_NAME
