@@ -9,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      REGISTRY_URL: ${{ ${{secrets.CI_REGISTRY}}${{github.repository}}/ | tr 'A-Z' 'a-z' }}
-      IMAGE_NAME: ${{ ${{github.ref_name}}:${{github.sha}} | tr 'A-Z' 'a-z' }}
+      REGISTRY_URL: ${{secrets.CI_REGISTRY}}${{github.repository}}/
+      IMAGE_NAME: ${{github.ref_name}}:${{github.sha}}
     steps:
     - uses: actions/checkout@v3
     - run: echo '${{ toJSON(github) }}'
@@ -19,5 +19,5 @@ jobs:
     - name: Build and push the Docker image
       run: |
         docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-        DOCKER_BUILDKIT=1 docker build -t $IMAGE_NAME .
-        docker push $REGISTRY_URL$IMAGE_NAME
+        DOCKER_BUILDKIT=1 docker build -t ${{ $IMAGE_NAME | tr 'A-Z' 'a-z' }} .
+        docker push ${{ $REGISTRY_URL$IMAGE_NAME | tr 'A-Z' 'a-z' }}
