@@ -15,6 +15,5 @@ jobs:
     - name: Build and push the Docker image
       run: |
         docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-        docker build . --file Dockerfile --tag my-image-name:$(date +%s)
         DOCKER_BUILDKIT=1 docker build --target prod -t $IMAGE_NAME .
         docker push $IMAGE_NAME
