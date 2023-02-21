@@ -8,12 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
     steps:
     - uses: actions/checkout@v3
     - name: Build and push the Docker image
       run: |
         docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-        DOCKER_BUILDKIT=1 docker build --target prod -t $IMAGE_NAME .
-        docker push $IMAGE_NAME
+        DOCKER_BUILDKIT=1 docker build --target prod -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG .
+        docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
