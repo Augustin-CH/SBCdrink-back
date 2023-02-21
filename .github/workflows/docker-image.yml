@@ -12,6 +12,7 @@ jobs:
       IMAGE_NAME: ${{github.GITHUB_REF_NAME}}:${{github.GITHUB_SHA}}
     steps:
     - uses: actions/checkout@v3
+    - run: echo '${{ toJSON(github) }}'
     - run: echo "image name ${{github.GITHUB_REF_NAME}}:${{github.GITHUB_SHA}}"
     - name: Build and push the Docker image
       run: |
