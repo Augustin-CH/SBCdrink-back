@@ -127,5 +127,6 @@ jobs:
           --name $CONTAINER_NAME $IMAGE_NAME
           docker network connect traefik-public $CONTAINER_NAME
           docker start $CONTAINER_NAME
+          
       
           
