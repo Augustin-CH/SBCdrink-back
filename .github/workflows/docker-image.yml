@@ -98,9 +98,6 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
-        
-      - name: echo
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}"
  
  
       - name: deploy with ssh
@@ -111,7 +108,7 @@ jobs:
         with:
           host: ${{ secrets.SERVER_IP }}
           username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          fingerprint: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
             whoami
