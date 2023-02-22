@@ -111,19 +111,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD https://ghcr.io
-            docker stop $CONTAINER_NAME || true
-            docker rm  $CONTAINER_NAME || true
-            docker rmi $IMAGE_NAME || true
-            docker create --env-file /home/deployer/api/${ENV_FILE} --env "WEBAPP_URL=${WEBAPP_URL}" --env "HOST=https://${CI_COMMIT_REF_SLUG}.api.${BASE_DOMAIN}" \
-            --label traefik.enable=true \
-            --label traefik.http.routers.${CONTAINER_NAME}.rule="Host\(\\\`${CI_COMMIT_REF_SLUG}.api.${BASE_DOMAIN}\\\`\)" \
-            --label traefik.http.routers.${CONTAINER_NAME}.tls=true \
-            --label traefik.http.routers.${CONTAINER_NAME}.entrypoints=websecure \
-            --label traefik.http.routers.${CONTAINER_NAME}.tls.certresolver=letsencrypt \
-            --name $CONTAINER_NAME $IMAGE_NAME
-            docker network connect traefik-public $CONTAINER_NAME
-            docker start $CONTAINER_NAME
+            whoami
+            ls -al
 
       
           
