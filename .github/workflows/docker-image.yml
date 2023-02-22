@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      REGISTRY_URL: registry.loichuart.com/${{ github.repository.name }}/
+      REGISTRY_URL: registry.loichuart.com/${{ github.event.repository.name }}/
       IMAGE_NAME: ${{ github.ref_name }}:${{ github.sha }}
     steps:
     - uses: actions/checkout@v3
