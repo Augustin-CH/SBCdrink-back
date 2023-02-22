@@ -29,7 +29,6 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -100,29 +99,33 @@ jobs:
         # against the sigstore community Fulcio instance.
         run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
         
-        
-      - name: deploy
-        env:
-          WEBAPP_URL: https://dev.${BASE_DOMAIN}
-        run: |
-          echo "deploying api"
-          eval $(ssh-agent -s)
-          echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          ssh-keyscan -p ${SSH_PORT} ${SERVER_IP} >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-          ssh ${DEPLOYER_USER}@${SERVER_IP} -p ${SSH_PORT} docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-          ssh ${DEPLOYER_USER}@${SERVER_IP} -p ${SSH_PORT} docker stop $CONTAINER_NAME || true
-          ssh ${DEPLOYER_USER}@${SERVER_IP} -p ${SSH_PORT} docker rm  $CONTAINER_NAME || true
-          ssh ${DEPLOYER_USER}@${SERVER_IP} -p ${SSH_PORT} docker rmi $IMAGE_NAME || true
-          ssh ${DEPLOYER_USER}@${SERVER_IP} -p ${SSH_PORT} docker create --env-file /home/deployer/api/${ENV_FILE} --env "WEBAPP_URL=${WEBAPP_URL}" --env "HOST=https://${CI_COMMIT_REF_SLUG}.api.${BASE_DOMAIN}" \
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands using password
+      env:
+        WEBAPP_URL: https://dev.${BASE_DOMAIN}
+        # ENV_FILE: .env.dev
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.DEPLOYER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD https://ghcr.io
+          docker stop $CONTAINER_NAME || true
+          docker rm  $CONTAINER_NAME || true
+          docker rmi $IMAGE_NAME || true
+          docker create --env-file /home/deployer/api/${ENV_FILE} --env "WEBAPP_URL=${WEBAPP_URL}" --env "HOST=https://${CI_COMMIT_REF_SLUG}.api.${BASE_DOMAIN}" \
           --label traefik.enable=true \
           --label traefik.http.routers.${CONTAINER_NAME}.rule="Host\(\\\`${CI_COMMIT_REF_SLUG}.api.${BASE_DOMAIN}\\\`\)" \
           --label traefik.http.routers.${CONTAINER_NAME}.tls=true \
           --label traefik.http.routers.${CONTAINER_NAME}.entrypoints=websecure \
           --label traefik.http.routers.${CONTAINER_NAME}.tls.certresolver=letsencrypt \
           --name $CONTAINER_NAME $IMAGE_NAME
-          ssh ${DEPLOYER_USER}@${SERVER_IP} -p ${SSH_PORT} docker network connect traefik-public $CONTAINER_NAME
-          ssh ${DEPLOYER_USER}@${SERVER_IP} -p ${SSH_PORT} docker start $CONTAINER_NAME
+          docker network connect traefik-public $CONTAINER_NAME
+          docker start $CONTAINER_NAME
+      
           
