@@ -110,6 +110,10 @@ jobs:
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null   
           ssh-add /home/runner/.ssh/github_actions
 
+      - name: test
+        run: |
+          ssh ${DEPLOYER_USER}@${SERVER_IP} -p ${SSH_PORT} "ls -al"
+
       - name: deploy with ssh
         env:
           WEBAPP_URL: https://dev.${BASE_DOMAIN}
