@@ -112,7 +112,7 @@ jobs:
 
       - name: test
         run: |
-          ssh ${DEPLOYER_USER}@${SERVER_IP} -p ${SSH_PORT} "ls -al"
+          ssh ${{ secrets.DEPLOYER_USER }}@${{ secrets.SERVER_IP }} -p ${{ secrets.SSH_PORT }} "ls -al"
 
       - name: deploy with ssh
         env:
