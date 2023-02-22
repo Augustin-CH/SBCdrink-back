@@ -99,6 +99,9 @@ jobs:
         # against the sigstore community Fulcio instance.
         run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
         
+      - name: echo
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}"
+ 
  
       - name: deploy with ssh
         env:
