@@ -20,4 +20,4 @@ jobs:
       run: |
         docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
         DOCKER_BUILDKIT=1 docker build -t $(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]') .
-        docker push $(echo "$REGISTRY_URL$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')
+        docker push $(echo "$IMAGE_NAME" | tr '[:upper:]' '[:lower:]')
