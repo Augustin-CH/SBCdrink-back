@@ -109,9 +109,6 @@ jobs:
           chmod 600 /home/runner/.ssh/github_actions
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null   
           ssh-add /home/runner/.ssh/github_actions
-
-      - name: test
-        run: |
           ssh ${{ secrets.DEPLOYER_USER }}@${{ secrets.SERVER_IP }} -p ${{ secrets.SSH_PORT }} "ls -al"
 
       - name: deploy with ssh
