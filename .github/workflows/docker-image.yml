@@ -105,10 +105,10 @@ jobs:
         run: | 
           mkdir -p ~/.ssh
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/github_actions
-          chmod 700 ~/.ssh/github_actions
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/known_hosts
+          chmod 700 ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null   
-          ssh-add ~/.ssh/github_actions
+          ssh-add ~/.ssh/known_hosts
           ssh ${{ secrets.DEPLOYER_USER }}@${{ secrets.SERVER_IP }} -p ${{ secrets.SSH_PORT }} "ls -al"
 
       - name: deploy with ssh
