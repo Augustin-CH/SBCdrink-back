@@ -57,7 +57,7 @@ module.exports = createCoreController('api::recipe.recipe', ({ strapi }) => ({
               alcoholLevel: recipe.alcoholLevel,
               alcoholMinLevel: recipe.alcoholMinLevel,
               alcoholMaxLevel: recipe.alcoholMaxLevel,
-              picture: recipe.picture.formats.small.url,
+              picture: recipe.picture.formats.small ? recipe.picture.formats.small.url : recipe.picture.formats.thumbnail.url,
               ingredients: recipeIngredients
           });
         }
