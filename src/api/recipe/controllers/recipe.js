@@ -136,8 +136,8 @@ module.exports = createCoreController('api::recipe.recipe', ({ strapi }) => ({
       const { id } = ctx.params;
       const { data } = ctx.request.body;
 
+      const ingredientsData = data.ingredients
       const recipeData = data
-      const ingredientsData = recipeData.ingredients
       delete recipeData.ingredients
 
       const recipe = await strapi.db.query('api::recipe.recipe').update({
