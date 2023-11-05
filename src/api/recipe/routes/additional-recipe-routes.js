@@ -21,5 +21,10 @@ module.exports = {
         path: '/recipes/:id', 
         handler: 'recipe.update',
       },
+      {
+        method: 'POST',
+        path: '/recipes/:id', 
+        handler: 'recipe.create',
+      },
     ]
   }
