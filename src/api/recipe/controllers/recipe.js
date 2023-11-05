@@ -130,5 +130,53 @@ module.exports = createCoreController('api::recipe.recipe', ({ strapi }) => ({
       } catch (err) {
         ctx.body = err;
       }
+    },
+
+    async update(ctx) {
+      const { id } = ctx.params;
+      const { data } = ctx.request.body;
+
+      const recipeData = data
+      const ingredientsData = recipeData.ingredients
+      delete recipeData.ingredients
+
+      const recipe = await strapi.db.query('api::recipe.recipe').update({
+        where: { id },
+        data: recipeData
+      });
+
+      const recipeIngredients = await strapi.db.query('api::recipe-ingredient.recipe-ingredient').findMany({
+        where: { recipe: { id } }
+      });
+
+      for (const recipeIngredient of recipeIngredients) {
+        await strapi.db.query('api::recipe-ingredient.recipe-ingredient').delete({
+          where: { id: recipeIngredient.id }
+        });
+      }
+
+      recipe.ingredients = [];
+
+      for (const ingredientData of ingredientsData) {
+        const newIngredient = await strapi.db.query('api::recipe-ingredient.recipe-ingredient').create({
+          data: {
+            recipe: {
+              connect: { id: recipe.id }
+            },
+            ingredient: {
+              connect: { id: ingredientData.id }
+            },
+            proportion: ingredientData.proportion,
+            order: ingredientData.order
+          }
+        });
+        recipe.ingredients.push(newIngredient);
+      }
+
+      try {
+        ctx.body = recipe;
+      } catch (err) {
+        ctx.body = err;
+      }
     }
 }));

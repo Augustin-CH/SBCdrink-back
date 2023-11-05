@@ -16,5 +16,10 @@ module.exports = {
         path: '/recipes/find', 
         handler: 'recipe.find',
       },
+      {
+        method: 'PUT',
+        path: '/recipes/:id', 
+        handler: 'recipe.update',
+      },
     ]
   }
