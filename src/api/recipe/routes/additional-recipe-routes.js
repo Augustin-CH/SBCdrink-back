@@ -10,6 +10,11 @@ module.exports = {
         method: 'GET',
         path: '/recipes/available', 
         handler: 'recipe.available',
-      }
+      },
+      {
+        method: 'GET',
+        path: '/recipes/find', 
+        handler: 'recipe.find',
+      },
     ]
   }
