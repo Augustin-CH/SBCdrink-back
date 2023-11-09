@@ -9,11 +9,12 @@
     "build": "strapi build",
     "strapi": "strapi"
   },
-  "devDependencies": {},
   "dependencies": {
-    "@strapi/strapi": "4.6.2",
-    "@strapi/plugin-users-permissions": "4.6.2",
+    "@grpc/grpc-js": "^1.9.9",
+    "@grpc/proto-loader": "^0.7.10",
     "@strapi/plugin-i18n": "4.6.2",
+    "@strapi/plugin-users-permissions": "4.6.2",
+    "@strapi/strapi": "4.6.2",
     "better-sqlite3": "8.0.1"
   },
   "author": {

@@ -23,7 +23,7 @@ module.exports = {
       },
       {
         method: 'POST',
-        path: '/recipes/:id', 
+        path: '/recipes', 
         handler: 'recipe.create',
       },
     ]
