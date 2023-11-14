@@ -7,9 +7,28 @@ var machine = require('../../../../protos/machine');
  */
 module.exports = {
     async make(ctx, next) {
-
       const data = ctx.request.body;
-      const res = await machine.runMakeCocktail(data)
+
+      const configurations = await strapi.db.query('api::machine-configuration.machine-configuration').findMany({
+        populate: {
+          ingredient: true
+        },
+        orderBy: {
+          slot: 'ASC'
+        }
+      });
+
+      const dataWithSlot = []
+      for (const step of data) {
+        const slot = configurations.find((configuration) => configuration.ingredient.id == step.ingredient)?.slot;
+        if(!slot) return ctx.badRequest('Invalid ingredient', `Ingredient ${step.ingredientId} not found in machine configuration slot.`)
+        dataWithSlot.push({
+          ...step,
+          slot
+        })
+      }
+
+      const res = await machine.runMakeCocktail(dataWithSlot)
         .then((res) => {
           return res;
         })
