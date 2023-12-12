@@ -18,14 +18,33 @@ module.exports = {
         }
       });
 
-      const dataWithSlot = []
-      for (const step of data) {
-        const slot = configurations.find((configuration) => configuration.ingredient.id == step.ingredient)?.slot;
-        if(!slot) return ctx.badRequest('Invalid ingredient', `Ingredient ${step.ingredientId} not found in machine configuration slot.`)
-        dataWithSlot.push({
-          ...step,
-          slot
-        })
+      const dataWithSlot = [];
+      let lastOrder = 1;
+
+      const sortRecipeIngredients = data.sort((a, b) => a.order - b.order);
+      
+      for (const recipeIngredient of sortRecipeIngredients) {
+        const slot = configurations.find((configuration) => configuration.ingredient.id == recipeIngredient.ingredient);
+        if(!slot) return ctx.badRequest('Invalid ingredient', `Ingredient ${recipeIngredient.ingredientId} not found in machine configuration slot.`)
+        let remainingQuantity = recipeIngredient.quantity * 10;
+        let ingredientStep = 0;
+
+        while(remainingQuantity > 0) {
+          const stepQuantity = (remainingQuantity > slot.measureVolume) ? slot.measureVolume : remainingQuantity;
+          const delayAfterPress = (stepQuantity === remainingQuantity) ? 0 : slot.measureVolume * 0.18;
+
+          dataWithSlot.push({
+            order: lastOrder + ingredientStep,
+            ingredient: recipeIngredient.ingredient,
+            slot: slot.slot,
+            pressedTime: 0.18 * stepQuantity,
+            delayAfterPress: delayAfterPress,
+          });
+
+          remainingQuantity -= stepQuantity;
+          ingredientStep++;
+        }
+        lastOrder = lastOrder + ingredientStep;
       }
 
       const res = await machine.runMakeCocktail(dataWithSlot)
